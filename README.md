@@ -1,9 +1,3 @@
-
----
-title: vuepress实战
-lang: en-ZH
----
-
 ### 使用vuepress快速搭建技术文档网站
 
 #### 项目结构
@@ -22,3 +16,11 @@ lang: en-ZH
 ├── package.json     //Node.js项目描述文件
 └── .travis.yml //Travis CI 自动部署文件
 ```
+
+### travis CI 自动部署文件
+
+1、创建master分支提交源代码，gh-pages分支放置网站静态资源
+2、github生成token
+3、登录travis，创建token环境变量
+4、项目根目录下创建.travis.yml文件
+5、修改代码，push上去travis自动更新网站
