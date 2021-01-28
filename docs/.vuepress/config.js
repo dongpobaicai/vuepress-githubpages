@@ -12,11 +12,11 @@ module.exports = {
     lineNumbers: true, //是否在每个代码块的左侧显示行号
   },
   themeConfig: {
+    sidebarDepth: 2,
+    sidebar: 'auto',
     nav: [
       // 导航栏配置
       { text: "组件库", link: "/pages/comlibrary/index.md" },
-      { text: "微前端", link: "/pages/micro/index.md" },
-      { text: "移动端", link: "/pages/mobile/index.md" },
       { text: "前端框架", link: "/pages/frame/index.md" },
       { text: "项目说明", link: "/pages/project/index.md" },
     ],
