@@ -2,7 +2,7 @@
 lang: en-ZH
 home: true
 actionText: 快速上手 →
-actionLink: /pages/快速入门.md
+actionLink: /pages/comlibrary/index.md
 features:
 - title: 组件库
   details: element-ui | ant-design-vue

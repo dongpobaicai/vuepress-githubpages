@@ -184,3 +184,105 @@ __qiankun__ || render()
   }
 }
 ```
+
+## 经典题分享
+
+搜集平时做过觉得好的题目
+
+1. 函数柯里化
+说明：是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术
+
+```js
+a(1, 2) 3
+a(1, 2, 3) 6
+a(1, 2, 3, 4) 10
+
+// 柯里化
+a(1)(2)
+a(1)(2)(3)
+a(1)(2)(3)(4)
+
+function a(x) {
+  return function(y) {
+    return x + y
+  }
+}
+// 通用版
+var currying = function(fn) {
+  // 获取第一个方法参数
+  var args = Array.prototype.slice.call(arguments, 1)
+  return function() {
+    var newArgs = args.concat(Array.prototype.slice.call(arguments))
+    return fn.apply(this, newArgs)
+  }
+}
+
+// 上面只能算两个参数，如果多个还需要调整
+
+// 支持多参数传递
+function progressCurrying(fn, args) {
+
+    var _this = this
+    var len = fn.length;
+    var args = args || [];
+
+    return function() {
+        var _args = Array.prototype.slice.call(arguments);
+        Array.prototype.push.apply(args, _args);
+
+        // 如果参数个数小于最初的fn.length，则递归调用，继续收集参数
+        if (args.length < len) {
+            return progressCurrying.call(_this, fn, _args);
+        }
+
+        // 参数收集完毕，则执行fn
+        return fn.apply(this, args);
+    }
+}
+function test(a, b) {
+  return a + b
+}
+console.log(progressCurrying(test)(1)(2)(3) )
+t(1)(2)(3)
+t(2)(3)
+```
+
+2. 对象键值，以下输出什么
+
+```js
+const a = {}
+const b = { key: 'b' }
+const c = { key: 'c' }
+
+a[b] = 123
+a[c] = 456
+
+console.log(a[b])
+```
+
+3. js事件环机制，结合setTimeout说明
+
+以下的打印顺序
+
+```js
+var a = () => { console.log('first') }
+var b = () => setTimeout(() => { console.log('second') })
+var c = () => { console.log('three') }
+
+a()
+b()
+c()
+```
+
++ 执行上述代码，依次放入执行栈中
++ 开始执行，执行a，打印first
++ 执行b，WebAPI 不能随时向栈内添加内容。相反，它将回调函数推到名为 queue 的地方。
++ 执行c，打印three
++ 一个事件循环查看栈和任务队列。如果栈是空的，它接受队列上的第一个元素并将其推入栈
++ 打印second
+
+4. 事件的响应顺序
+
++ Capturing > Target > Bubbling
++ 在捕获阶段，从父元素到目标元素
++ 在冒泡阶段，从目标元素一直向上冒泡
