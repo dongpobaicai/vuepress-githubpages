@@ -286,3 +286,66 @@ c()
 + Capturing > Target > Bubbling
 + 在捕获阶段，从父元素到目标元素
 + 在冒泡阶段，从目标元素一直向上冒泡
++ 默认事件在冒泡阶段执行，除非设置useCapture为true
+
+5. falsy（能转化为false的值）值有哪些
+
++ null，undefined，''，NaN，0，false
+
+6. 关于堆栈、运算符的问题
+
+```js
+var a = {n: 1};
+var b = a;
+a.x = a = {n: 2};
+
+a.x 	
+b.x 
+```
+
++ 前面两句比较容易理解，堆中存放了{ n: 1 }，栈中存放这个对象地址，a, b赋值为这个对象地址
++ 首先计算左边表达式a.x，堆中对象变成 { n: 1, x: undefined }，并生成一个引用
++ 接着开始赋值操作，按照运算符优先级，从右到左。  a 这个变量指向了 { n: 2 } 这个地址
++ 因为a.x先计算，实际上此刻它为 { n: 1, x: undefined } 这个对象引用，所以赋值为  { n: 1, x: { n: 2 } }
++ 打印a.x  a: { n: 2 } 故 undefined
++ 打印b.x  b: { n: 1, x: { n: 2 } }  故  { n: 2 }
+
+7. 关于this指向
+
+> 默认规则，隐式绑定 
+
+```js
+var num = 1;
+var myObject = {
+    num: 2,
+    add: function() {
+        this.num = 3;
+        (function() {
+            console.log(this.num);
+            this.num = 4;
+        })();
+        console.log(this.num);
+    },
+    sub: function() {
+        console.log(this.num)
+    }
+}
+myObject.add();
+console.log(myObject.num);
+console.log(num);
+var sub = myObject.sub;
+sub();
+```
+
+```js
+var obj = {
+    say: function () {
+        function _say() {
+            console.log(this);
+        }
+        console.log(obj);
+        return _say.bind(obj);
+    }()
+}
+obj.say()
+```

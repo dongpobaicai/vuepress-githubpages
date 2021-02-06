@@ -1,6 +1,6 @@
 module.exports = {
   base: "/vuepress-githubpages/", // 目录根地址，应与Github仓库名字相同
-  title: "清大视光项目文档说明",
+  title: "东坡白菜技术分享",
   description: "让你快速熟悉项目内容",
   head: [
     [
