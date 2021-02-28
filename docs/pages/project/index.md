@@ -185,6 +185,78 @@ __qiankun__ || render()
 }
 ```
 
+## 设计模式
+
+> 提高代码可重复行，健壮性
+
+### 单例模式
+
+- 全局只存在一个实例
+- 代码实现
+  ```js
+  function getSingle(fn) {
+    let instance = null
+  
+    return function() {
+      if (!instance) {
+        instance = fn.apply(this, arguments)
+      }
+  
+      return instance
+    }
+  }
+  
+  function teacher(name) {
+    this.name = name 
+  }
+  
+  teacher.prototype.getName = function() {
+    console.log(this.name)
+  }
+  
+  const createTeacher = getSingle(function(name) {
+      const instance = new teacher(name)
+
+      return instance
+  })
+  
+  createTeacher('吴老师').getName()
+  createTeacher('大大老师').getName()
+  ```
+
+### 工厂模式
+
+- 创建对象，通过create函数来完成，不通过new方式，不暴露实例类
+  ```js
+  class Dog {
+    constructor(name) {
+      this.name = name
+    }
+    getName() {
+      console.log(this.name)
+    }
+  }
+    
+  class Factory {
+    create(name) {
+      return new Dog(name)
+    }
+  } 
+
+  const factory = new Factory()
+  const dog1 = factory.create('狼狗')
+  const dog2 = factory.create('柯基')
+
+  dog1.getName()
+  dog2.getName()
+  ```
+
+### 代理模式
+
+- 保护模式
+- 
+
+
 ## 经典题分享
 
 搜集平时做过觉得好的题目
