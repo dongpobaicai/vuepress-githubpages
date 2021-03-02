@@ -11,19 +11,19 @@
 
 ### 双向数据绑定原理
 
-+ vue 2.0
-+ v-model 是⽤来在表单控件或者组件上创建双向绑定的，他的本质是  v-bind 和  v-on 的语法糖。
-+ 在⼀个组件上使⽤  v-model ，默认会为组件绑定名为  value 的  prop 和名为 input 的事件。
-+ 自定义组件可以通过这个特征完成v-model效果
+- vue 2.0
+- v-model 是⽤来在表单控件或者组件上创建双向绑定的，他的本质是 v-bind 和 v-on 的语法糖。
+- 在⼀个组件上使⽤ v-model ，默认会为组件绑定名为 value 的 prop 和名为 input 的事件。
+- 自定义组件可以通过这个特征完成 v-model 效果
 
-+ vue3.0
-+ 在 3.x 中，⾃定义组件上的  v-model 相当于传递了 modelValue prop 并接收抛出的 update:modelValue 事件
+- vue3.0
+- 在 3.x 中，⾃定义组件上的 v-model 相当于传递了 modelValue prop 并接收抛出的 update:modelValue 事件
 
-### computed的原理
+### computed 的原理
 
-1. 调用initComputed方法
-2. 
-
+1. 调用 initComputed 方法
+2. 对计算属性数据劫持，在 get 中收集依赖，set 中触发更新
+3. dep 管理依赖
 
 ### vue2.0 响应式原理
 
@@ -145,17 +145,28 @@ function parsePath(path) {
 }
 ```
 
+### nextTick 的原理
 
-### nextTick的原理
+### vue 的模板编译原理
 
-### vue的模板编译原理
-
-### vue相关问题
+### 父组件和子组件的生命周期执行顺序是什么样子的
 
 1. 父组件和子组件的生命周期执行顺序是什么样子的
 2. 初始化：父组件 beforeCreate => created => beforeMount => 子组件 beforeCreate => created => beforeMount => mounted => 父 mounted
 3. 更新：父 beforeUpdate => 子 beforeUpdate => 子 updated => 父 updated
 4. 销毁: 父 beforeDestroy => 子 beforeDestroy => 子 destroyed => 父 destroyed
+
+### v-for 中 key 的作用
+
+### 为什么 v-for 和 v-if 不建议⽤在⼀起
+
+### vue-router 的 history 和 hash 模式区别，以及如何实现
+
+### vue 中的 data 返回是函数，而不是对象原因
+
+### vue 的性能优化
+
+### 预渲染和 SSR 渲染会利于 SEO 优化
 
 ## js 相关内容
 
@@ -656,7 +667,97 @@ function sParse(source) {
 }
 ```
 
-
-
-
 ### EventLoop
+
+### 原型链，instanceof 的实现
+
+- 原型链查找是通过**proto**属性连接的
+
+```js
+a instanceof B; // 判断B是否在a的原型链上
+
+function instance_of(o, p) {
+  var proto = o.__proto__;
+  var struct = p.prototype;
+  while (true) {
+    if (proto == null) {
+      return false;
+    }
+    if (proto === struct) {
+      return true;
+    }
+    proto = proto.__proto__;
+  }
+}
+```
+
+### 高阶函数
+
+满足以下至少一个条件就称为高阶函数
+
+1. 将函数作为另一个函数的参数
+2. 返回结果是函数
+
+- 第一种情况常见高阶函数有, map, filter, reduce
+- 第二种情况，如：类型判断函数，累加函数
+
+函数柯里化是高阶函数一种实现，常见应用场景有
+
+1. 延迟计算
+   - 累加计算
+   - bind 的实现
+2. 动态创建函数
+   - 事件添加判断
+3. 参数复用
+4. currying 函数实现
+
+```js
+function currying(fn, length) {
+  length = length || fn.length;
+  return function(...args) {
+    return args.length >= length
+      ? fn.apply(this, args)
+      : currying(fn.bind(this, ...args), length - args.length);
+  };
+}
+```
+
+1. 函数参数 length
+2. 原生数组方法源码实现
+   - map  返回新的数组，改变原数组可能引起错误
+   - filter 通过回调函数结果，判断是否添加到新数组，最后一步修改数组实际长度
+   - reduce 有无初始值判断
+   - forEach 没有返回值
+
+### 节流防抖
+
+1. 节流是指到达指定时间后才能执行
+   - 每次执行记下当前时间戳，下次事件执行如果时间戳差大于等于设置，就执行
+   - 定时器实现，执行完设置一个定时器，到点后清除定时器。每次事件执行，通过判断是否存在定时器来决定
+
+### es6 ~ es12 新特性
+
+- es6的主要特性
+  - class
+  - promise
+  - 扩展符
+  - 赋值解构
+  - 模板字符串
+  - 箭头函数
+  - es module
+  - let const
+- es10
+  - flat
+  - 可选catch
+- es11
+  - ?? 空值处理
+  - 可选链
+  - allSettled  等所有promise执行完返回，不管通过或反对
+  - import()
+  - BigInt 新增的数据类型
+  - globalThis
+- es12
+  - replaceAll
+  - promise.any  只要有一个成功就返回，否则返回失败
+  - WeakRefs 对对象的弱引用
+  
