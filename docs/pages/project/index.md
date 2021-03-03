@@ -203,9 +203,95 @@ __qiankun__ || render();
 - 通过类方法形式创建请求实例
 - 通过配置方式，设置请求拦截，响应拦截
 
+## 设计模式
+
+> 提高代码可重复行，健壮性
+
+### 单例模式
+
+- 全局只存在一个实例
+- 代码实现
+
+  ```js
+  function getSingle(fn) {
+    let instance = null
+  
+    return function() {
+      if (!instance) {
+        instance = fn.apply(this, arguments)
+      }
+  
+      return instance
+    }
+  }
+  
+  function teacher(name) {
+    this.name = name 
+  }
+  
+  teacher.prototype.getName = function() {
+    console.log(this.name)
+  }
+  
+  const createTeacher = getSingle(function(name) {
+      const instance = new teacher(name)
+
+      return instance
+  })
+  
+  createTeacher('吴老师').getName()
+  createTeacher('大大老师').getName()
+  ```
+
+### 工厂模式
+
+- 创建对象，通过create函数来完成，不通过new方式，不暴露实例类
+
+  ```js
+  class Dog {
+    constructor(name) {
+      this.name = name
+    }
+    getName() {
+      console.log(this.name)
+    }
+  }
+    
+  class Factory {
+    create(name) {
+      return new Dog(name)
+    }
+  } 
+
+  const factory = new Factory()
+  const dog1 = factory.create('狼狗')
+  const dog2 = factory.create('柯基')
+
+  dog1.getName()
+  dog2.getName()
+  ```
+
+### 代理模式
+
+- 保护模式
+- 防抖模式
+- 缓存模式
+
+### 订阅发布模式
+
+- vue的数据监测和更新
+
+### 装饰器模式
+
+- 在原先对象进行扩展，不影响之前方法
+
+### 适配器模式
+
+- 对数据做统一的处理，以满足执行函数
+
 ## 经典题分享
 
-搜集平时做过觉得好的题目
+收集平时做过，觉得好的题目
 
 1. 函数柯里化
    说明：是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术
